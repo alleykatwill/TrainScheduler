@@ -1,6 +1,6 @@
 // Your web app's Firebase configuration
 
-var coinfig = {
+var config = {
   apiKey: "AIzaSyBbh4DZfM0diWgYtuoYAC2uPf2JHnvIajM",
   authDomain: "alley-11ff4.firebaseapp.com",
   databaseURL: "https://alley-11ff4.firebaseio.com",
@@ -60,7 +60,11 @@ $("#addTrainBtn").on("click", function() {
 
 trainData.ref().on("child_added", function(snapshot) {
   var name = snapshot.val().name;
-  var remainder = moment().diff(moment.unic(firstTrain), "minutes") % frequency;
+  var destination = snapshot.val().destination;
+  var frequency = snapshot.val().frequency;
+  var firstTrain = snapshot.val().firstTrain;
+
+  var remainder = moment().diff(moment.unix(firstTrain), "minutes") % frequency;
   var minutes = frequency - remainder;
   var arrival = moment()
     .add(minutes, "m")
@@ -76,9 +80,12 @@ trainData.ref().on("child_added", function(snapshot) {
       "</td><td>" +
       destination +
       "</td><td>" +
+      frequency +
+      " </td><td>" +
       arrival +
       "</td><td>" +
       minutes +
       "</td><td>"
   );
 });
+
